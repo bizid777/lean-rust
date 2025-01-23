@@ -57,3 +57,60 @@ def main : IO Unit :=
     | Except.ok res => IO.println s!"Is {num} odd? {res}"
     | Except.error err => IO.println s!"Error: {err}"
 #eval main 
+
+
+
+//// attempt to prove the code
+mutual
+  /-- Proves that isEven n returns true if and only if n = 2k for some k -/
+  theorem isEven_correct (n : Int) (h : n ≥ 0) :
+    isEven n = Except.ok true ↔ ∃ k, n = 2 * k := by
+    cases n
+    case ofNat n =>
+      induction n with
+      | zero =>
+        apply Iff.intro
+        · intro _
+          exists 0
+        · intro ⟨k, hk⟩
+          rfl
+      | succ n ih =>
+        simp [isEven]
+        rw [isOdd]
+        apply isOdd_correct
+        exact Nat.le_of_succ_le h
+    case negSucc n =>
+      simp [isEven, h]
+
+  /-- Proves that isOdd n returns true if and only if n = 2k + 1 for some k -/
+  theorem isOdd_correct (n : Int) (h : n ≥ 0) :
+    isOdd n = Except.ok true ↔ ∃ k, n = 2 * k + 1 := by
+    cases n
+    case ofNat n =>
+      induction n with
+      | zero =>
+        simp [isOdd]
+        constructor
+        · intro h
+          contradiction
+        · intro ⟨k, hk⟩
+          rw [hk]
+          simp [isOdd]
+      | succ n ih =>
+        simp [isOdd]
+        rw [isEven]
+        apply isEven_correct
+        exact Nat.le_of_succ_le h
+    case negSucc n =>
+      simp [isOdd, h]
+end
+
+/-- Proves that isEven returns error for negative numbers -/
+theorem isEven_neg {n : Int} (h : n < 0) :
+  isEven n = Except.error "Negative numbers are not supported." := by
+  simp [isEven, h]
+
+/-- Proves that isOdd returns error for negative numbers -/
+theorem isOdd_neg {n : Int} (h : n < 0) :
+  isOdd n = Except.error "Negative numbers are not supported." := by
+  simp [isOdd, h]
