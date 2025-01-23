@@ -1,0 +1,14 @@
+name = "AeneasTest"
+version = "0.1.0"
+defaultTargets = ["aeneastest"]
+
+[[lean_lib]]
+name = "AeneasTest"
+
+[[lean_exe]]
+name = "aeneastest"
+root = "Main"
+
+[[require]]
+name = "aeneas"
+path = "aeneas/backends/lean"
