@@ -7,11 +7,12 @@ All command paths are relative to the root of your repo.
 - [ ] `brew install gmake`
 - [ ] `git clone https://github.com/AeneasVerif/aeneas` (from the root of your repo)
 - [ ] `cd aeneas`
-- [ ] `gmake setup-charon`
-- [ ] `cd ..`
+- [ ] `gmake setup-charon`. `gmake build-dev` if you get some error about `cargo fmt`.
+- [ ] `cd charon`
 - [ ] `gmake`
-  - [ ] `aeneas` should be at `aeneas/bin/aeneas`. You can use it to generate `.llbc` files that can be 
-- [ ] `aeneas/charon/bin/charon --hide-marker-traits`. It will generate a `.llbc` file in the root of your repo, probably named `aeneas_test.llbc`.
+  - [ ] `aeneas` should be at `aeneas/bin/aeneas`. You can use it to generate `.llbc` files that can be
+- [ ] `cd` to the root of the repo (`lean-rust`)
+- [ ] Run `aeneas/charon/bin/charon --hide-marker-traits`. It will generate a `.llbc` file in the root of your repo, probably named `aeneas_test.llbc`.
 - [ ] `aeneas/bin/aeneas -backend lean aeneas_test.llbc`
 
 Put the rust code you want to verify in `src/main.rs`. If you feel like you understand the Rust module system, you can put it in other files and import them into `src/main.rs`.
