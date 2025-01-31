@@ -13,19 +13,72 @@ namespace aeneas_test
    Name pattern: core::fmt::Arguments -/
 axiom core.fmt.Arguments : Type
 
-/- [core::fmt::{core::fmt::Arguments<'a>}#2::new_const]:
-   Source: '/rustc/library/core/src/fmt/mod.rs', lines 337:4-337:81
-   Name pattern: core::fmt::{core::fmt::Arguments<''a>}::new_const -/
-axiom core.fmt.Arguments.new_const
-  {N : Usize} : Array Str N → Result core.fmt.Arguments
+/- [core::fmt::rt::Argument]
+   Source: '/rustc/library/core/src/fmt/rt.rs', lines 92:0-92:23
+   Name pattern: core::fmt::rt::Argument -/
+axiom core.fmt.rt.Argument : Type
+
+/- [aeneas_test::fib]:
+   Source: 'src/main.rs', lines 8:0-16:1 -/
+divergent def fib (n : U32) : Result U32 :=
+  if n = 0#u32
+  then Result.ok 1#u32
+  else
+    if n = 1#u32
+    then Result.ok 1#u32
+    else
+      do
+      let i ← n - 1#u32
+      let i1 ← fib i
+      let i2 ← n - 2#u32
+      let i3 ← fib i2
+      i1 + i3
+
+/- Trait declaration: [core::fmt::Display]
+   Source: '/rustc/library/core/src/fmt/mod.rs', lines 724:0-724:17
+   Name pattern: core::fmt::Display -/
+structure (ERROR: "trait_decl_id: 1") (Self : Type) where
+  sorry
+
+/- [core::fmt::rt::{core::fmt::rt::Argument<0>}#1::new_display]:
+   Source: '/rustc/library/core/src/fmt/rt.rs', lines 113:4-113:57
+   Name pattern: core::fmt::rt::{core::fmt::rt::Argument<'0>}::new_display -/
+axiom core.fmt.rt.Argument.new_display
+  {T : Type} (DisplayInst : (ERROR: "trait_decl_id: 1") T) :
+  T → Result core.fmt.rt.Argument
+
+/- Trait implementation: [core::fmt::num::imp::{core::fmt::Display for u32}#10]
+   Source: '/rustc/library/core/src/fmt/num.rs', lines 203:8-203:32
+   Name pattern: core::fmt::Display<u32> -/
+@[reducible]
+def core.fmt.DisplayU32 : (ERROR: "trait_decl_id: 1") U32 := {
+  sorry
+}
+
+/- [core::fmt::{core::fmt::Arguments<'a>}#2::new_v1]:
+   Source: '/rustc/library/core/src/fmt/mod.rs', lines 345:4-348:22
+   Name pattern: core::fmt::{core::fmt::Arguments<''a>}::new_v1 -/
+axiom core.fmt.Arguments.new_v1
+  {P : Usize} {A : Usize} :
+  Array Str P → Array core.fmt.rt.Argument A → Result core.fmt.Arguments
 
 /- [std::io::stdio::_print]:
    Source: '/rustc/library/std/src/io/stdio.rs', lines 1231:0-1231:39
    Name pattern: std::io::stdio::_print -/
 axiom std.io.stdio._print : core.fmt.Arguments → Result Unit
 
+/- [aeneas_test::sumupton]:
+   Source: 'src/main.rs', lines 19:0-25:1 -/
+divergent def sumupton (n : U32) : Result U32 :=
+  if n = 0#u32
+  then Result.ok 0#u32
+  else do
+       let i ← n - 1#u32
+       let i1 ← sumupton i
+       n + i1
+
 /- [aeneas_test::main]:
-   Source: 'src/main.rs', lines 1:0-3:1 -/
+   Source: 'src/main.rs', lines 3:0-6:1 -/
 def main : Result Unit :=
   sorry
 
